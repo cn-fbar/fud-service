@@ -1,0 +1,21 @@
+package cs.io.fudservice.entity;
+
+import lombok.Data;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+@Data
+public class AppRole {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
+    private String name;
+
+    public AppRole(String name) {
+        this.name = name;
+    }
+}

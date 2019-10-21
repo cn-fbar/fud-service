@@ -1,12 +1,11 @@
 package cs.io.fudservice;
 
-import cs.io.fudservice.chef.AdminRepository;
-import cs.io.fudservice.chef.ChefRepository;
-import cs.io.fudservice.chef.CustomerRepository;
-import cs.io.fudservice.entity.Admin;
-import cs.io.fudservice.entity.Chef;
-import cs.io.fudservice.entity.Customer;
+import cs.io.fudservice.chef.AppRoleRepository;
+import cs.io.fudservice.chef.AppUserRepository;
+import cs.io.fudservice.entity.AppRole;
+import cs.io.fudservice.entity.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,32 +16,43 @@ import javax.transaction.Transactional;
 public class SetupController {
 
     @Autowired
-    private ChefRepository chefRepository;
+    private AppRoleRepository appRoleRepository;
 
     @Autowired
-    private AdminRepository adminRepository;
-
-    @Autowired
-    private CustomerRepository customerRepository;
+    private AppUserRepository appUserRepository;
 
     @RequestMapping("/init")
     @Transactional
     public String createTestData() {
         clearTestData();
-        Admin appaAdmin = new Admin( "Nallazhagappan", "Rengasamy", "nazhagappan@gmail.com", "https://drive.google.com/file/d/1FVqPhDNaGm2XauY21GFInJcM2cAUmwoW/view?usp=sharing");
-        adminRepository.save(appaAdmin);
+        AppRole appAdmin = new AppRole("Admin");
+        appRoleRepository.save(appAdmin);
 
-        Chef deviChef = new Chef("Devi", "Vasantha", "3451 Chapel Oaks drive", "1903", "Coppell", "Texas", "United states", "good in non-veg, specialities - Chicken khorma, chapathi, dosa batter, soup", 4.5, "vasanthadeiveehan@gmail.com", "https://drive.google.com/open?id=13JqhYnd8Y3br2rW5GlMVnHDCrqw4zH4V");
-        chefRepository.save(deviChef);
+        AppRole appChef = new AppRole("Chef");
+        appRoleRepository.save(appChef);
 
-        Chef priyaChef = new Chef( "Priya", "Srivatsan", "3451 Chapel Oaks drive", "1602", "Irving", "Texas", "United states", "veg, specialities - Gobi, panneer, paratha", 3.5, "priyasrivatsan@gmail.com", "https://drive.google.com/file/d/1Pzpa6yDL7rFfQraSqbR-XRZypf6atJbG/view?usp=sharing");
-        chefRepository.save(priyaChef);
+        AppRole appCustomer = new AppRole("Customer");
+        appRoleRepository.save(appCustomer);
 
-        Chef jayashreeChef = new Chef("Jayashree", "Nagaprabhu", "3451 Chapel Oaks drive", "1602", "Irving", "Texas", "United states", "veg, specialities - Gobi, panneer, paratha", 3.5, "priyasrivatsan@gmail.com", "https://drive.google.com/file/d/1Pzpa6yDL7rFfQraSqbR-XRZypf6atJbG/view?usp=sharing");
-        chefRepository.save(priyaChef);
+        AppUser deviChef = new AppUser("Devi", "Vasantha", "3451 Chapel Oaks drive", "1903", "Coppell", "Texas", "United states", "vasanthadeiveehan@gmail.com", "vasanthadeiveehan@gmail.com");
 
-        Customer deiveeCustomer = new Customer("Deiveehan", "Nallazhagappan", "3451 Chapel Oaks drive", "1904", "Coppell", "Texas", "United states", "deiveehan@gmail.com", "https://s3-us-west-1.amazonaws.com/co-directory-images/deiveehan.jpg");
-        customerRepository.save(deiveeCustomer);
+        appUserRepository.save(deviChef);
+
+        AppUser priyaChef = new AppUser( "Priya", "Srivatsan", "3451 Chapel Oaks drive", "1602", "Irving", "Texas", "United states", "priyasrivatsan@gmail.com", "priyasrivatsan@gmail.com");
+        appUserRepository.save(priyaChef);
+
+        AppUser jayashreeChef = new AppUser("Jayashree", "Nagaprabhu", "3451 Chapel Oaks drive", "1602", "Irving", "Texas", "United states", "jayashree@gmail.com", "jayashree@gmail.com");
+        appUserRepository.save(jayashreeChef);
+
+
+        AppUser keerthanaAdmin = new AppUser("Keerthana", "Deiveehan", "3451 Chapel Oaks drive", "1602", "Irving", "Texas", "United states", "keerthi@gmail.com", "keerthi@gmail.com");
+        appUserRepository.save(keerthanaAdmin);
+
+        AppUser deiveeCustomer = new AppUser("Deiveehan", "Nallazhagappan", "3451 Chapel Oaks drive", "1602", "Irving", "Texas", "United states", "deiveehan@gmail.com", "deiveehan@gmail.com");
+        appUserRepository.save(deiveeCustomer);
+
+//        AppUser deiveeCustomer = new AppUser("Deiveehan", "Nallazhagappan", "3451 Chapel Oaks drive", "1904", "Coppell", "Texas", "United states", "deiveehan@gmail.com");
+//        appUserRepository.save(deiveeCustomer);
 
         return "Initial Setup data created.";
     }
@@ -50,9 +60,8 @@ public class SetupController {
     @RequestMapping("/clear")
     @Transactional
     public String clearTestData() {
-        chefRepository.deleteAll();
-        customerRepository.deleteAll();
-        adminRepository.deleteAll();
+        appUserRepository.deleteAll();
+        appRoleRepository.deleteAll();
         return "Data cleared..";
     }
 
